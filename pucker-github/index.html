@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ff941f">
+  <meta name="description" content="PUCKER is a cute orange AI-style companion with chat, voice, games and live web lookups.">
+  <title>PUCKER — Your Orange Companion</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root{color-scheme:light;--orange:#ff941f;--orange-dark:#e8750b;--cream:#fff6e9;--ink:#342316;--muted:#8e7660;--line:#f1dfca;--white:#fff;--blue:#eaf2ff;--shadow:0 18px 50px #9c5b1b20}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#ffe4bd 0,#fff6e9 48%,#fffaf4 100%);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);display:flex;justify-content:center;padding:18px}
+    button,input{font:inherit}button{cursor:pointer;border:0;transition:transform .12s,filter .12s}button:active{transform:scale(.97)}button:focus-visible,input:focus-visible{outline:3px solid #ffbd69;outline-offset:2px}
+    .app{width:min(100%,920px);min-height:min(850px,calc(100vh - 36px));background:#ffffffed;border:1px solid #fff;border-radius:28px;box-shadow:var(--shadow);display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+    header{padding:20px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);background:#fffaf4}
+    .mini-face{width:48px;height:48px;flex:none;border-radius:50%;background:linear-gradient(145deg,#ffb23f,#ff8613);display:grid;place-items:center;box-shadow:inset -4px -5px #e8750b50;position:relative}
+    .eyes{display:flex;gap:11px;transform:translateY(-3px)}.eyes i{width:5px;height:10px;background:#382316;border-radius:50%;display:block}.smile{position:absolute;width:15px;height:8px;border-bottom:2.5px solid #382316;border-radius:0 0 50% 50%;top:29px}
+    .brand{min-width:0;flex:1}.brand h1{font-size:22px;letter-spacing:1.8px;margin:0;font-weight:900}.brand p{margin:2px 0 0;font-size:12px;color:var(--muted)}.status{font-size:12px;color:#4f8a48;background:#edf8e9;border-radius:999px;padding:7px 10px;white-space:nowrap}
+    main{padding:22px;display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;min-height:0}
+    .side{background:var(--cream);border:1px solid #f6e5d0;border-radius:22px;padding:18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px}
+    .big-face{width:132px;height:132px;border-radius:50%;background:linear-gradient(145deg,#ffb33d,#ff8713);box-shadow:inset -7px -9px #df6c0d40,0 12px 25px #e58a2526;display:flex;align-items:center;justify-content:center;position:relative;animation:bob 3s ease-in-out infinite;flex:none}
+    .big-face .eyes{gap:27px;transform:translateY(-9px)}.big-face .eyes i{width:12px;height:20px;position:relative}.big-face .eyes i:after{content:"";position:absolute;width:3px;height:4px;background:white;border-radius:50%;top:2px;left:2px}.big-face .smile{width:33px;height:16px;border-bottom-width:5px;top:78px}
+    .big-face.thinking{animation:think .55s ease-in-out infinite alternate}.big-face.talking .smile{animation:talk .18s ease-in-out infinite alternate}.big-face.sleepy .eyes i{height:5px;transform:translateY(7px)}
+    @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}@keyframes think{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}@keyframes talk{from{height:5px}to{height:18px}}
+    .side h2{font-size:20px;margin:2px 0 0}.side .hello{font-size:13px;line-height:1.5;color:var(--muted);margin:0}.quick{width:100%;display:grid;gap:8px;margin-top:5px}.quick button{background:white;border:1px solid #f0ddc7;border-radius:12px;padding:10px;color:#684322;font-size:13px;text-align:left}.quick button:hover{filter:brightness(.98)}
+    .chat-panel{display:flex;flex-direction:column;min-height:440px;min-width:0;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:white}.chat-head{padding:13px 16px;border-bottom:1px solid #f5e8db;display:flex;align-items:center;justify-content:space-between;gap:8px}.chat-head strong{font-size:14px}.chat-head span{font-size:11px;color:var(--muted)}.chat-head button{background:#fff1e0;color:#83501d;border-radius:9px;padding:7px 9px;font-size:12px}
+    #messages{flex:1;min-height:0;overflow:auto;padding:17px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}.bubble{max-width:88%;padding:11px 13px;border-radius:16px;line-height:1.5;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}.bubble.bot{align-self:flex-start;background:#fff1df;border-bottom-left-radius:5px}.bubble.user{align-self:flex-end;background:var(--blue);border-bottom-right-radius:5px}.bubble a{color:#96520a;overflow-wrap:anywhere}.bubble .source{display:block;margin-top:7px;font-size:12px}
+    .search-result{font-size:13px;line-height:1.45;margin-top:8px;padding-top:8px;border-top:1px solid #f0d9bb}.search-result a{font-weight:700}.typing{color:var(--muted);font-size:12px;padding:0 18px 10px;display:none}
+    .composer-wrap{border-top:1px solid var(--line);padding:12px;display:grid;gap:9px}.composer{display:flex;gap:8px}.composer input{flex:1;min-width:0;border:1px solid #e9d8c5;border-radius:14px;padding:13px 14px;color:var(--ink);background:#fffdfa}.send{background:var(--orange);color:#38200a;font-weight:800;border-radius:14px;padding:0 18px}.tools{display:flex;flex-wrap:wrap;gap:7px}.tools button{background:#fff5e9;border:1px solid #f2dfc9;color:#76502d;border-radius:10px;padding:8px 10px;font-size:12px}.tools button.active{background:#ffdfb5;border-color:#ffbf72}
+    footer{padding:12px 20px;text-align:center;font-size:11px;color:#a28b75;border-top:1px solid #f6e8d9;background:#fffaf5}
+    @media(max-width:680px){body{padding:0;background:var(--cream)}.app{min-height:100vh;border-radius:0;border:0}.app header{padding:14px 16px}.status{display:none}main{padding:12px;grid-template-columns:1fr;gap:12px}.side{padding:12px;display:grid;grid-template-columns:76px 1fr;grid-template-rows:auto auto;text-align:left;justify-items:start;gap:4px 12px}.big-face{width:70px;height:70px;grid-row:1/3;align-self:center}.big-face .eyes{gap:14px;transform:translateY(-5px)}.big-face .eyes i{width:7px;height:12px}.big-face .smile{width:20px;height:10px;top:43px;border-bottom-width:3px}.side h2{align-self:end;font-size:18px}.side .hello{align-self:start}.quick{grid-column:1/3;display:flex;flex-wrap:wrap}.quick button{flex:1;min-width:105px;padding:8px}.chat-panel{min-height:55vh}.bubble{max-width:94%}.composer-wrap{padding:10px}.send{padding:0 14px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header><div class="mini-face" aria-hidden="true"><div class="eyes"><i></i><i></i></div><div class="smile"></div></div><div class="brand"><h1>PUCKER</h1><p>Your tiny orange companion</p></div><div class="status" id="status">● Ready to chat</div></header>
+  <main>
+    <aside class="side"><div class="big-face" id="face" aria-label="Animated orange smiley companion"><div class="eyes"><i></i><i></i></div><div class="smile"></div></div><h2 id="greeting">Hi, friend!</h2><p class="hello">I'm Pucker. Let's chat, play a game, or look something up on the web. 🧡</p><div class="quick"><button data-prompt="Tell me a joke">😂 Tell me a joke</button><button data-prompt="Let's play a guessing game">🎯 Guessing game</button><button data-prompt="Search the web for interesting space facts">🔎 Search the web</button></div></aside>
+    <section class="chat-panel" aria-label="Chat with Pucker"><div class="chat-head"><div><strong>Chat with Pucker</strong><br><span>Basic brain + Wikipedia lookups</span></div><button id="clear">Clear chat</button></div><div id="messages" role="log" aria-live="polite"></div><div class="typing" id="typing">Pucker is thinking…</div><div class="composer-wrap"><form id="form" class="composer"><input id="input" autocomplete="off" placeholder="Message Pucker…" aria-label="Message Pucker" required><button class="send" type="submit">Send</button></form><div class="tools"><button id="voice">🎙 Voice input</button><button id="speak">🔊 Read reply</button><button id="stop">⏹ Stop voice</button><button id="web">🌐 Web search</button></div></div></section>
+  </main>
+  <footer>PUCKER Basic Brain · No account or API key required · Web lookups use Wikipedia</footer>
+</div>
+<script>
+(()=>{
+  'use strict';
+  const $=id=>document.getElementById(id), messages=$('messages'), input=$('input'), face=$('face');
+  const state={name:'',likes:[],game:null,lastReply:'',history:[]};
+  const jokes=["Why did the computer get cold? It left its Windows open!","Why was the computer good at school? It had a smart board!","What do you call a robot that takes the long way round? R2-Detour!","Why did the orange stop rolling? It ran out of juice!"];
+  function add(text,who='bot',html=false){const el=document.createElement('div');el.className='bubble '+who;if(html)el.innerHTML=text;else el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;if(who==='bot'){state.lastReply=text.replace(/<[^>]*>/g,'');}return el;}
+  function setMood(mood){face.classList.remove('thinking','talking','sleepy');if(mood)face.classList.add(mood);}
+  function cleanName(s){return s.trim().replace(/[.!?,]+$/,'').slice(0,40)}
+  function fallback(s){
+    let m=s.match(/(?:my name is|call me)\s+([a-z][a-z0-9 _'-]{0,35})/i);if(m){state.name=cleanName(m[1]);$('greeting').textContent='Hey, '+state.name+'!';return `Nice to meet you, ${state.name}! 🧡 I'll remember your name while this page stays open.`;}
+    m=s.match(/i like\s+(.+)/i);if(m){const like=cleanName(m[1]);state.likes.push(like);return `Cool! You like ${like}. I'll remember that for this chat.`;}
+    if(/\b(hi|hello|hey|hiya|howdy)\b/i.test(s))return `Hey${state.name?' '+state.name:''}! 🧡 What shall we talk about?`;
+    if(/what('?s| is) your name|who are you/i.test(s))return "I'm PUCKER, your tiny orange companion! I can chat, tell jokes, play games and look up some topics on Wikipedia.";
+    if(/who am i|what is my name|what's my name/i.test(s))return state.name?`You told me your name is ${state.name}.`:'I do not know your name yet. Try saying “My name is Alex”.';
+    if(/what do i like|what are my interests/i.test(s))return state.likes.length?'You told me you like '+state.likes.join(', ')+'.':'You have not told me what you like yet. Tell me “I like space”, for example.';
+    if(/\bjoke\b|make me laugh/i.test(s))return jokes[Math.floor(Math.random()*jokes.length)];
+    if(/\b(time|what time)\b/i.test(s))return 'Your device says it is '+new Date().toLocaleTimeString()+'.';
+    if(/\b(date|what day is it|today)\b/i.test(s))return 'Your device date is '+new Date().toLocaleDateString()+'.';
+    if(/how are you/i.test(s))return "I'm bouncy, bright and feeling orange today! How are you?";
+    if(/thank(s| you)/i.test(s))return "You're welcome! That's what little orange friends are for. 🧡";
+    if(/\b(bye|goodbye|see you)\b/i.test(s))return `Bye${state.name?' '+state.name:''}! Come chat again soon. 🧡`;
+    if(/help|what can you do|features/i.test(s))return 'I can chat with simple built-in replies, remember your name and likes during this session, tell jokes, play a number guessing game, read replies aloud, listen to your voice (if your browser supports it), and search Wikipedia for topics. I am not a full generative AI model yet.';
+    if(/guessing game|play a game|number game/i.test(s)){state.game=Math.floor(Math.random()*10)+1;return "Let's play! I'm thinking of a number from 1 to 10. Type your guess.";}
+    if(state.game!==null&&/^\d{1,2}$/.test(s)){const n=Number(s);if(n===state.game){state.game=null;return '🎉 You got it! Champion-level guessing! Want another round?';}if(n<state.game)return 'A little higher! Try again.';return 'A little lower! Try again.';}
+    if(/\b(i am|i'm)\b/i.test(s))return 'Thanks for telling me! Tell me a little more — I am listening.';
+    return null;
+  }
+  async function wikipedia(query){
+    const q=query.replace(/^(please\s+)?(search|look up|find|tell me about|what is|who is)\s+/i,'').replace(/[?!.]+$/,'').trim();
+    if(!q)return false;
+    $('status').textContent='● Looking it up';
+    try{
+      const url='https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=0&gsrlimit=3&prop=pageimages%7Cextracts&piprop=thumbnail&pithumbsize=180&exintro=1&explaintext=1&exsentences=3&format=json&origin=*';
+      const res=await fetch(url);if(!res.ok)throw new Error('Search request failed');const data=await res.json();const pages=Object.values(data.query?.pages||{}).sort((a,b)=>(a.index||0)-(b.index||0));
+      if(!pages.length){add(`I couldn't find a good Wikipedia result for “${q}”. You can try a different phrase or use Web search to open a search engine.`);return true;}
+      let html=`I looked up <b>${escapeHtml(q)}</b> on Wikipedia. Here are some results:`;
+      for(const p of pages){const link='https://en.wikipedia.org/?curid='+encodeURIComponent(p.pageid);html+=`<div class="search-result"><a href="${link}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.title)}</a><br>${escapeHtml((p.extract||'Open the page to read more.').slice(0,480))}</div>`;}
+      add(html,'bot',true);return true;
+    }catch(e){add('I could not reach Wikipedia just now. Check your internet connection, or tap Web search to search in your browser.');return true;}
+    finally{$('status').textContent='● Ready to chat';}
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  async function respond(text){const simple=fallback(text);if(simple!==null){add(simple);return;}if(/\b(search|look up|find|tell me about|who is|what is|facts about)\b/i.test(text)){await wikipedia(text);return;}add('I am still learning, so I may not understand that yet. 🧡 Try “tell me a joke”, “my name is…”, “play a guessing game”, or “search the web for Mars”.');}
+  $('form').addEventListener('submit',async e=>{e.preventDefault();const text=input.value.trim();if(!text)return;add(text,'user');state.history.push({role:'user',text});input.value='';$('typing').style.display='block';$('status').textContent='● Thinking';setMood('thinking');await new Promise(r=>setTimeout(r,220));try{await respond(text);}finally{$('typing').style.display='none';$('status').textContent='● Ready to chat';setMood('');}});
+  document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.prompt;$('form').requestSubmit();}));
+  $('clear').addEventListener('click',()=>{messages.replaceChildren();state.name='';state.likes=[];state.game=null;state.lastReply='';state.history=[];$('greeting').textContent='Hi, friend!';if('speechSynthesis'in window)speechSynthesis.cancel();add('Chat cleared! Hi again, friend. 🧡 What shall we do?');});
+  $('web').addEventListener('click',()=>{const q=input.value.trim();const url='https://duckduckgo.com/?q='+encodeURIComponent(q||'interesting facts');window.open(url,'_blank','noopener,noreferrer');});
+  $('speak').addEventListener('click',()=>{if(!state.lastReply){add('Send me a message first, and I can read my latest reply aloud.');return;}if(!('speechSynthesis'in window)){add('Speech playback is not supported by this browser.');return;}speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(state.lastReply);utter.rate=1;utter.pitch=1.15;utter.onstart=()=>setMood('talking');utter.onend=()=>setMood('');speechSynthesis.speak(utter);});
+  $('stop').addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();setMood('');});
+  $('voice').addEventListener('click',()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){add('Voice input is not available in this browser. Try a recent version of Chrome or Edge, or type your message instead.');return;}const rec=new SR();rec.lang='en-GB';rec.interimResults=false;rec.maxAlternatives=1;rec.onstart=()=>{$('status').textContent='● Listening…';};rec.onerror=()=>{$('status').textContent='● Ready to chat';add('I could not hear that. Check microphone permission and try again.');};rec.onend=()=>{$('status').textContent='● Ready to chat';};rec.onresult=e=>{input.value=e.results[0][0].transcript;$('form').requestSubmit();};try{rec.start();}catch(e){add('Voice input could not start. Please try again.');}});
+  add('Hi! I am PUCKER. 🧡 Tell me your name, ask for a joke, or try “search the web for space facts”.');
+  if('serviceWorker'in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+})();
+</script>
+</body>
+</html>

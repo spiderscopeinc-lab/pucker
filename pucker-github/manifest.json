@@ -1,0 +1,11 @@
+{
+  "name": "PUCKER — Your Orange Companion",
+  "short_name": "PUCKER",
+  "description": "A cute orange chat companion with simple chat, voice, games and Wikipedia lookups.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff6e9",
+  "theme_color": "#ff941f",
+  "icons": []
+}
